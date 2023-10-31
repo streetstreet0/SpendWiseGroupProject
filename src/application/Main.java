@@ -4,11 +4,12 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import javax.print.DocFlavor.READER;
-
+import javafx.scene.paint.Color;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -42,7 +43,7 @@ public class Main extends Application {
 		vBox1.setAlignment(Pos.CENTER);
 		VBox vBox2 = new VBox();
 		vBox2.setAlignment(Pos.CENTER);	
-			
+
 		//User name horizontal
 		HBox hBox11 = new HBox();
 		hBox11.setAlignment(Pos.CENTER);
@@ -81,7 +82,28 @@ public class Main extends Application {
 		text2.setText("Password  ");
 
 		//Login button
+		HBox hBox21= new HBox(),hBox22 = new HBox();
+		hBox21.setAlignment(Pos.CENTER);
+		hBox22.setAlignment(Pos.CENTER);
+		Button logiButton = new Button();
+		Region region4 = new Region();
+		Region region5 = new Region();
+		region4.setMinHeight(height*0.01);
+		region5.setMinHeight(height*0.2);
+		vBox2.getChildren().addAll(hBox21,region4,hBox22,region5);
+		hBox21.getChildren().addAll(logiButton);
+		logiButton.setMinHeight(height*0.03);
+		logiButton.setMinWidth(width*0.05);
+		logiButton.setText("Login");
+		Text text3 = new Text();
+		hBox22.getChildren().setAll(text3);
+		text3.setText("Creat account");
+		text3.setFill(Color.BLUE);
 		
+		logiButton.setOnAction(e ->{
+			//Next home page method
+			
+		});
 
 		root.setCenter(vBox1);
 		root.setBottom(vBox2);
