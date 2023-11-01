@@ -1,1 +1,6 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.button {
+        -fx-color:black;
+        -fx-padding:4px;
+        -fx-background-color:black;
+        -fx-background-radius: 10px;
+}/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
