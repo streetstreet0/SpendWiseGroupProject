@@ -137,12 +137,6 @@ public class Main extends Application {
 		categoriseTransaction.setMaxWidth(vBox3.getPrefWidth());
 		spendingReport.setMaxWidth(vBox3.getPrefWidth());
 		settingsButton.setMaxWidth(vBox3.getPrefWidth());
-		
-		//View transaction horizontal
-		HBox hBox11 = new HBox();
-		hBox11.setAlignment(Pos.TOP_LEFT);
-		HBox hBox111= new HBox();
-		HBox hBox112 = new HBox();
 
 		vBox3.getChildren().addAll(viewTransaction, categoriseTransaction, spendingReport, settingsButton);
 		
