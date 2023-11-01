@@ -2,6 +2,7 @@ package backend;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -56,6 +57,22 @@ public class TransactionImporter {
 	 * @throws FileNotFoundException
 	 */
 	public void exportTransactionList(ArrayList<Transaction> transactions) throws FileNotFoundException {
+		PrintStream print = new PrintStream(transactionFile);
+		for (Transaction transaction : transactions) {
+			String exportLine = "" + transaction.isPurchase();
+			exportLine += " " + transaction.getAmount();
+			
+			Date date = transaction.getDate();
+			exportLine += " " + date.getDay();
+			exportLine += " " + date.getMonth();
+			exportLine += " " + date.getYear();
+			
+			exportLine += " " + transaction.getCategory().name();
+			exportLine += " " + transaction.getTransactionTitle();
+			
+			print.println(exportLine);
+		}
 		
+		print.close();
 	}
 }
