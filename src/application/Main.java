@@ -15,11 +15,18 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -150,23 +157,44 @@ public class Main extends Application {
 		BorderPane root = new BorderPane();
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
+		
+		Image backgroundImage = new Image("/images/homepage.jpeg");
+		BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO , false, false, false, true);
+		BackgroundImage backgroundImg = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
+		root.setBackground(new Background(backgroundImg));
+		
 		VBox vBox3 = new VBox();
-		vBox3.setSpacing(10);
-		vBox3.setPrefWidth(200);
-		vBox3.setTranslateX(20);
-		vBox3.setTranslateY(20);
+		vBox3.setSpacing(20); //button spacing
+		vBox3.setPrefWidth(170);
+		vBox3.setTranslateX(40); //vBox position on stage
+		vBox3.setTranslateY(300);
 		vBox3.setAlignment(Pos.TOP_LEFT);
 		
+				
 		Button viewTransaction = new Button("View Transaction");
-		Button categoriseTransaction = new Button("Categorise Transation");
+		Button categoriseTransaction = new Button("Categorise Transaction");
 		Button spendingReport = new Button("Detailed Spending Report");
 		Button settingsButton = new Button("Settings");
 		
-		
+		//home Buttons width all set to vBox width
 		viewTransaction.setMaxWidth(vBox3.getPrefWidth());
 		categoriseTransaction.setMaxWidth(vBox3.getPrefWidth());
 		spendingReport.setMaxWidth(vBox3.getPrefWidth());
 		settingsButton.setMaxWidth(vBox3.getPrefWidth());
+		
+		//home Buttons height size
+		double buttonHeight = 40;
+		viewTransaction.setPrefHeight(buttonHeight);
+		categoriseTransaction.setPrefHeight(buttonHeight);
+		spendingReport.setPrefHeight(buttonHeight);
+		settingsButton.setPrefHeight(buttonHeight);
+		
+		//home Buttons font size
+		Font buttonFont = new Font(14);  
+		viewTransaction.setFont(buttonFont);
+		categoriseTransaction.setFont(buttonFont);
+		spendingReport.setFont(buttonFont);
+		settingsButton.setFont(buttonFont);
 
 		vBox3.getChildren().addAll(viewTransaction, categoriseTransaction, spendingReport, settingsButton);
 		
