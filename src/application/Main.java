@@ -44,7 +44,6 @@ public class Main extends Application {
 		vBox2.setAlignment(Pos.CENTER);
 
 		// User name horizontal
-		//da
 		HBox hBox11 = new HBox();
 		hBox11.setAlignment(Pos.CENTER);
 		HBox hBox111 = new HBox();
