@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -75,11 +76,11 @@ public class Main extends Application {
 		region3.setMinWidth(width*0.01);
 		hBox12.getChildren().addAll(hBox121,region3,hBox122);
 		Text text2 = new Text();
-		TextField textField2 = new TextField();
+		PasswordField passwordField= new PasswordField();
 		hBox121.getChildren().addAll(text2);
-		hBox122.getChildren().addAll(textField2);
+		hBox122.getChildren().addAll(passwordField);
 		text2.setText("Password  ");
-		textField2.setPromptText("Password");
+		passwordField.setPromptText("Password");
 
 		//Login button
 		HBox hBox21= new HBox(),hBox22 = new HBox();
