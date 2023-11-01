@@ -1,5 +1,8 @@
 package backend;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Transaction {
 	private String transactionTitle;
 	private Date date;
@@ -37,6 +40,28 @@ public class Transaction {
 
 	public void setCategory(TransactionCategory category) {
 		this.category = category;
+	}
+	
+	/**
+	 * Create a TransactionVisual for the tableview.
+	 * 
+	 * Note that this TransactionVisual does not update with the transaction, so whenever we change the category
+	 * we will need to generate a new transaction visual and replace the old one.
+	 * @return A TransactionVisual that represents the transaction for the tableview.
+	 */
+	public TransactionVisual generateTransactionVisual() {
+		StringProperty transactionTitle = new SimpleStringProperty(this, "transactionTitle", this.transactionTitle);
+		StringProperty date = new SimpleStringProperty(this, "date", this.date.toString());
+		StringProperty amount = new SimpleStringProperty(this, "amount", "$" + this.amount);
+		StringProperty purchase;
+		if (this.purchase) {
+			purchase = new SimpleStringProperty(this, "purchase", "expense");
+		}
+		else {
+			purchase = new SimpleStringProperty(this, "purchase", "income");
+		}
+		StringProperty category = new SimpleStringProperty(this, "category", this.category.toString());
+		return new TransactionVisual(transactionTitle, date, amount, purchase, category);
 	}
 
 }
