@@ -23,6 +23,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -31,6 +33,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+	private Screen screen;
 
 	Toolkit kit = Toolkit.getDefaultToolkit();
 	Dimension size = kit.getScreenSize();
@@ -48,6 +51,7 @@ public class Main extends Application {
 	}
 
 	public void loginScene(Stage stage) {
+		screen = Screen.LOGIN;
 		BorderPane root = new BorderPane();
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
@@ -149,9 +153,12 @@ public class Main extends Application {
 	}
 
 	public void homePage(Stage stage) {
+		screen = Screen.HOME;
 		BorderPane root = new BorderPane();
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
+		
+		
 		VBox vBox3 = new VBox();
 		vBox3.setSpacing(10);
 		vBox3.setPrefWidth(200);
@@ -171,19 +178,28 @@ public class Main extends Application {
 		Button back = new Button("Back");
 
 		vBox3.getChildren().addAll(viewTransaction, categoriseTransaction, spendingReport, settingsButton);
-
-		root.setCenter(vBox3);
+		
+		GridPane mainBox = new GridPane();
+		mainBox.getChildren().add(vBox3);
+		GridPane.setColumnIndex(mainBox, 0);
+		mainBox.getColumnConstraints().add(new ColumnConstraints(200));
+		root.setCenter(mainBox);
 
 		viewTransaction.setOnAction(e -> {
-
-			VBox VBOXX = showTransactions();
-			VBOXX.setPrefHeight(height);
-			VBOXX.setPrefWidth(width);
-			vBox3.getChildren().add(VBOXX);
-			VBOXX.getChildren().add(back);
-			back.setOnAction(ei -> {
-				vBox3.getChildren().remove(VBOXX);
-			});
+			if (screen != Screen.VIEWTRANSACTION) {
+				screen = Screen.VIEWTRANSACTION;
+				VBox VBOXX = showTransactions();
+				VBOXX.setPrefHeight(height);
+				VBOXX.setPrefWidth(width);
+				VBOXX.getChildren().add(back);
+				mainBox.getChildren().add(VBOXX);
+				GridPane.setColumnIndex(VBOXX, 1);
+				mainBox.getColumnConstraints().add(new ColumnConstraints(1000));
+				back.setOnAction(ei -> {
+					mainBox.getChildren().remove(VBOXX);
+					screen = Screen.HOME;
+				});
+			}
 		});
 	}
 
@@ -215,7 +231,7 @@ public class Main extends Application {
 				.observableArrayList((new Transaction("food", new Date(1, 1, 1), 30, true, TransactionCategory.NONE))
 						.generateTransactionVisual());
 
-		table.getItems().addAll(items1);
+//		table.getItems().addAll(items1);
 		return vb;
 
 	}
