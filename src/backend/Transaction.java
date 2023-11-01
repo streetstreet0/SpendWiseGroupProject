@@ -1,7 +1,5 @@
 package backend;
 
-import java.util.Date;
-
 public class Transaction {
 	private String transactionTitle;
 	private Date date;
