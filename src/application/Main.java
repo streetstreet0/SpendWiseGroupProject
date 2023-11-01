@@ -2,6 +2,7 @@ package application;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 import javax.swing.text.html.Option;
@@ -158,7 +159,14 @@ public class Main extends Application {
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		
-		Image backgroundImage = new Image("/images/homepage.jpeg");
+		System.out.println("Working Directory = " + System.getProperty("user.dir"));
+		Image backgroundImage = null;
+		try {
+			backgroundImage = new Image(getClass().getResource("/images/homepage.jpeg").toURI().toString());
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO , false, false, false, true);
 		BackgroundImage backgroundImg = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
 		root.setBackground(new Background(backgroundImg));
