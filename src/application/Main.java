@@ -97,7 +97,7 @@ public class Main extends Application {
 		logiButton.setText("Login");
 		Text text3 = new Text();
 		hBox22.getChildren().setAll(text3);
-		text3.setText("Create account");
+		text3.setText("Creat account");
 		text3.setFill(Color.BLUE);
 
 		logiButton.setOnAction(e -> {
