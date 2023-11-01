@@ -2,13 +2,19 @@ package application;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.Optional;
+
+import javax.swing.text.html.Option;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -98,6 +104,13 @@ public class Main extends Application {
 		Text text3 = new Text();
 		hBox22.getChildren().setAll(text3);
 		text3.setText("Creat account");
+		text3.setOnMouseEntered(e->{
+			text3.setFill(Color.BLACK);
+		});
+		text3.setOnMouseExited(e->{
+			
+		text3.setFill(Color.BLUE);
+		});
 		text3.setFill(Color.BLUE);
 
 		
@@ -108,12 +121,29 @@ public class Main extends Application {
 		
 		logiButton.setOnAction(e -> {
 			// Next home page method
-			homePage(stage);
+			if(this.alert("Do you want to login?")){
+				this.homePage(stage);
+			}
 			
 			
 			
 
 		});
+	}
+
+	public Boolean alert (String question){
+		Alert al = new Alert(AlertType.CONFIRMATION);
+		
+		al.setHeaderText(question);
+
+		Optional<ButtonType> result = al.showAndWait();
+
+		if(result.isPresent()&&result.get()==ButtonType.OK){
+			return true;
+		}else{
+			return false;
+		}
+
 	}
 
 	public void homePage(Stage stage) {
