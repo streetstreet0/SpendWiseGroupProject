@@ -5,8 +5,9 @@ import javafx.beans.property.StringProperty;
 /**
  * This is the visual representation of a transaction for the tableview
  * 
- * Note that if the transaction is editted in any way (such as changing the category), this will not notice.
- * A new transactionVisual will need to be created.
+ * Note that if the transaction is editted in any way (such as changing the
+ * category), this will not notice. A new transactionVisual will need to be
+ * created.
  */
 public class TransactionVisual {
 	private final StringProperty transactionTitle;
@@ -14,7 +15,7 @@ public class TransactionVisual {
 	private final StringProperty amount;
 	private final StringProperty purchase;
 	private final StringProperty category;
-	
+
 	public TransactionVisual(StringProperty transactionTitle, StringProperty date, StringProperty amount,
 			StringProperty purchase, StringProperty category) {
 		this.transactionTitle = transactionTitle;
@@ -24,26 +25,24 @@ public class TransactionVisual {
 		this.category = category;
 	}
 
-	public StringProperty getTransactionTitle() {
-		return transactionTitle;
+	public String getTransactionTitle() {
+		return transactionTitle.get();
 	}
 
-	public StringProperty getDate() {
-		return date;
+	public String getDate() {
+		return date.get();
 	}
 
-	public StringProperty getAmount() {
-		return amount;
+	public String getAmount() {
+		return amount.get();
 	}
 
-	public StringProperty getPurchase() {
-		return purchase;
+	public String getPurchase() {
+		return purchase.get();
 	}
 
-	public StringProperty getCategory() {
-		return category;
+	public String getCategory() {
+		return category.get();
 	}
-	
-	
 
 }

@@ -4,17 +4,24 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.Optional;
 
-import javax.swing.text.html.Option;
-
+import backend.Date;
+import backend.Transaction;
+import backend.TransactionCategory;
+import backend.TransactionVisual;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -81,7 +88,7 @@ public class Main extends Application {
 		region3.setMinWidth(width * 0.01);
 		hBox12.getChildren().addAll(hBox121, region3, hBox122);
 		Text text2 = new Text();
-		PasswordField passwordField= new PasswordField();
+		PasswordField passwordField = new PasswordField();
 		hBox121.getChildren().addAll(text2);
 		hBox122.getChildren().addAll(passwordField);
 		text2.setText("Password  ");
@@ -104,42 +111,38 @@ public class Main extends Application {
 		Text text3 = new Text();
 		hBox22.getChildren().setAll(text3);
 		text3.setText("Create account");
-		text3.setOnMouseEntered(e->{
+		text3.setOnMouseEntered(e -> {
 			text3.setFill(Color.BLACK);
 		});
-		text3.setOnMouseExited(e->{
-			
-		text3.setFill(Color.BLUE);
+		text3.setOnMouseExited(e -> {
+
+			text3.setFill(Color.BLUE);
 		});
 		text3.setFill(Color.BLUE);
 
-		
 		stage.requestFocus();
 
 		root.setCenter(vBox1);
 		root.setBottom(vBox2);
-		
-		
+
 		logiButton.setOnAction(e -> {
 			// Next home page method
-			
-				this.homePage(stage);
-			
-					
-			
+
+			this.homePage(stage);
+
 		});
 	}
 
-	public Boolean alert (String question){
+	public Boolean alert(String question) {
 		Alert al = new Alert(AlertType.CONFIRMATION);
-		
+
 		al.setHeaderText(question);
 
 		Optional<ButtonType> result = al.showAndWait();
 
-		if(result.isPresent()&&result.get()==ButtonType.OK){
+		if (result.isPresent() && result.get() == ButtonType.OK) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 
@@ -155,25 +158,68 @@ public class Main extends Application {
 		vBox3.setTranslateX(20);
 		vBox3.setTranslateY(20);
 		vBox3.setAlignment(Pos.TOP_LEFT);
-		
+
 		Button viewTransaction = new Button("View Transaction");
 		Button categoriseTransaction = new Button("Categorise Transation");
 		Button spendingReport = new Button("Detailed Spending Report");
 		Button settingsButton = new Button("Settings");
-		
-		
+
 		viewTransaction.setMaxWidth(vBox3.getPrefWidth());
 		categoriseTransaction.setMaxWidth(vBox3.getPrefWidth());
 		spendingReport.setMaxWidth(vBox3.getPrefWidth());
 		settingsButton.setMaxWidth(vBox3.getPrefWidth());
+		Button back = new Button("Back");
 
 		vBox3.getChildren().addAll(viewTransaction, categoriseTransaction, spendingReport, settingsButton);
-		
+
 		root.setCenter(vBox3);
-		
-	
+
+		viewTransaction.setOnAction(e -> {
+
+			VBox VBOXX = showTransactions();
+			VBOXX.setPrefHeight(height);
+			VBOXX.setPrefWidth(width);
+			vBox3.getChildren().add(VBOXX);
+			VBOXX.getChildren().add(back);
+			back.setOnAction(ei -> {
+				vBox3.getChildren().remove(VBOXX);
+			});
+		});
 	}
-	
+
+	public VBox showTransactions() {
+
+		VBox vb = new VBox();
+
+		TableView<TransactionVisual> table = new TableView<TransactionVisual>();
+		table.setPrefWidth(vb.getWidth());
+
+		TableColumn firstColumn = new TableColumn("Date");
+		firstColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("transactionTitle"));
+		TableColumn SecondColumn = new TableColumn("Transaction Detail");
+		SecondColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("date"));
+		TableColumn thirdColumn = new TableColumn("Amount");
+		thirdColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("amount"));
+		TableColumn fourthColumn = new TableColumn("type");
+		thirdColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("purchase"));
+		TableColumn fifthColumn = new TableColumn("category");
+		thirdColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("category"));
+
+		vb.getChildren().addAll(table);
+
+		table.setEditable(true);
+
+		table.getColumns().addAll(firstColumn, SecondColumn, thirdColumn, fourthColumn, fifthColumn);
+
+		ObservableList<TransactionVisual> items1 = FXCollections
+				.observableArrayList((new Transaction("food", new Date(1, 1, 1), 30, true, TransactionCategory.NONE))
+						.generateTransactionVisual());
+
+		table.getItems().addAll(items1);
+		return vb;
+
+	}
+
 	public static void main(String[] args) {
 		launch(args);
 	}
