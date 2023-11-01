@@ -103,7 +103,7 @@ public class Main extends Application {
 		logiButton.setText("Login");
 		Text text3 = new Text();
 		hBox22.getChildren().setAll(text3);
-		text3.setText("Creat account");
+		text3.setText("Create account");
 		text3.setOnMouseEntered(e->{
 			text3.setFill(Color.BLACK);
 		});
@@ -119,6 +119,7 @@ public class Main extends Application {
 		root.setCenter(vBox1);
 		root.setBottom(vBox2);
 		
+		// Do we need this alert? -kade
 		logiButton.setOnAction(e -> {
 			// Next home page method
 			if(this.alert("Do you want to login?")){
