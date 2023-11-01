@@ -119,16 +119,14 @@ public class Main extends Application {
 		root.setCenter(vBox1);
 		root.setBottom(vBox2);
 		
-		// Do we need this alert? -kade
+		
 		logiButton.setOnAction(e -> {
 			// Next home page method
-			if(this.alert("Do you want to login?")){
+			
 				this.homePage(stage);
-			}
 			
+					
 			
-			
-
 		});
 	}
 
