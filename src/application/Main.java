@@ -3,7 +3,6 @@ package application;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import javax.print.DocFlavor.READER;
 import javafx.scene.paint.Color;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -80,6 +79,7 @@ public class Main extends Application {
 		hBox121.getChildren().addAll(text2);
 		hBox122.getChildren().addAll(textField2);
 		text2.setText("Password  ");
+		textField2.setPromptText("Password");
 
 		//Login button
 		HBox hBox21= new HBox(),hBox22 = new HBox();
@@ -102,8 +102,9 @@ public class Main extends Application {
 		
 		logiButton.setOnAction(e ->{
 			//Next home page method
-			
+
 		});
+		stage.requestFocus();
 
 		root.setCenter(vBox1);
 		root.setBottom(vBox2);
