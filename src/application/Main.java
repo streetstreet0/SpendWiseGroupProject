@@ -80,6 +80,7 @@ public class Main extends Application {
 		hBox121.getChildren().addAll(text2);
 		hBox122.getChildren().addAll(passwordField);
 		text2.setText("Password  ");
+		//1
 		passwordField.setPromptText("Password");
 
 		//Login button
