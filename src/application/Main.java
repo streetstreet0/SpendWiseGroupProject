@@ -100,16 +100,57 @@ public class Main extends Application {
 		text3.setText("Creat account");
 		text3.setFill(Color.BLUE);
 
-		logiButton.setOnAction(e -> {
-			// Next home page method
-
-		});
+		
 		stage.requestFocus();
 
 		root.setCenter(vBox1);
 		root.setBottom(vBox2);
+		
+		logiButton.setOnAction(e -> {
+			// Next home page method
+			homePage(stage);
+			
+			
+			
+
+		});
 	}
 
+	public void homePage(Stage stage) {
+		BorderPane root = new BorderPane();
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		VBox vBox3 = new VBox();
+		vBox3.setSpacing(10);
+		vBox3.setPrefWidth(200);
+		vBox3.setTranslateX(20);
+		vBox3.setTranslateY(20);
+		vBox3.setAlignment(Pos.TOP_LEFT);
+		
+		Button viewTransaction = new Button("View Transaction");
+		Button categoriseTransaction = new Button("Categorise Transation");
+		Button spendingReport = new Button("Detailed Spending Report");
+		Button settingsButton = new Button("Settings");
+		
+		
+		viewTransaction.setMaxWidth(vBox3.getPrefWidth());
+		categoriseTransaction.setMaxWidth(vBox3.getPrefWidth());
+		spendingReport.setMaxWidth(vBox3.getPrefWidth());
+		settingsButton.setMaxWidth(vBox3.getPrefWidth());
+		
+		//View transaction horizontal
+		HBox hBox11 = new HBox();
+		hBox11.setAlignment(Pos.TOP_LEFT);
+		HBox hBox111= new HBox();
+		HBox hBox112 = new HBox();
+
+		vBox3.getChildren().addAll(viewTransaction, categoriseTransaction, spendingReport, settingsButton);
+		
+		root.setCenter(vBox3);
+		
+	
+	}
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
