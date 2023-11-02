@@ -40,6 +40,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * Javadoc comment
+ */
+
 public class Main extends Application {
 	private Screen screen;
 
