@@ -272,6 +272,7 @@ public class Main extends Application {
 
 		table.getColumns().addAll(firstColumn, SecondColumn, thirdColumn, fourthColumn, fifthColumn);
 
+
 		ObservableList<Transaction> items1 = FXCollections
 				.observableArrayList();
 		
