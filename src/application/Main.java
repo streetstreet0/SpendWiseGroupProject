@@ -268,8 +268,7 @@ public class Main extends Application {
 
 		table.getColumns().addAll(firstColumn, SecondColumn, thirdColumn, fourthColumn, fifthColumn);
 
-		ObservableList<Transaction> items1 = FXCollections
-				.observableArrayList((new Transaction("food", new Date(1, 1, 1), 30, true, TransactionCategory.NONE))
+		ObservableList<Transaction> items1 = FXCollections.observableArrayList((new Transaction("food", new Date(1, 1, 1), 30, true, TransactionCategory.NONE))
 						);
 
 		table.getItems().addAll(items1);
