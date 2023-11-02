@@ -3,6 +3,7 @@ package backend;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -65,6 +66,26 @@ public class TransactionImporter {
 	 * @param transactions an array list of transactions to export
 	 * @throws FileNotFoundException
 	 */
+
+	public void exportTransactionList(ArrayList<Transaction> transactions) throws FileNotFoundException {
+		PrintStream print = new PrintStream(transactionFile);
+		for (Transaction transaction : transactions) {
+			String exportLine = "" + transaction.isPurchase();
+			exportLine += " " + transaction.getAmount();
+			
+			Date date = transaction.getDate();
+			exportLine += " " + date.getDay();
+			exportLine += " " + date.getMonth();
+			exportLine += " " + date.getYear();
+			
+			exportLine += " " + transaction.getCategory().name();
+			exportLine += " " + transaction.getTransactionTitle();
+			
+			print.println(exportLine);
+		}
+		
+		print.close();
+	}
 	
 	/**
 	 * Saves an ArrayList of Transaction objects to a specified file with a ".sw" extension.
