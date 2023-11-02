@@ -48,5 +48,10 @@ public class Date implements Comparable<Date> {
 		int dayDiff = this.day - date.getDay();
 		return dayDiff;
 	}
+	
+	@Override
+	public String toString() {
+		return day + "/" + month + "/" + year;
+	}
 
 }

@@ -4,15 +4,22 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.Optional;
 
-import javax.swing.text.html.Option;
-
+import backend.Date;
+import backend.Transaction;
+import backend.TransactionCategory;
+import backend.TransactionVisual;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -21,7 +28,10 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -31,6 +41,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+	private Screen screen;
 
 	Toolkit kit = Toolkit.getDefaultToolkit();
 	Dimension size = kit.getScreenSize();
@@ -48,6 +59,7 @@ public class Main extends Application {
 	}
 
 	public void loginScene(Stage stage) {
+		screen = Screen.LOGIN;
 		BorderPane root = new BorderPane();
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
@@ -88,7 +100,7 @@ public class Main extends Application {
 		region3.setMinWidth(width * 0.01);
 		hBox12.getChildren().addAll(hBox121, region3, hBox122);
 		Text text2 = new Text();
-		PasswordField passwordField= new PasswordField();
+		PasswordField passwordField = new PasswordField();
 		hBox121.getChildren().addAll(text2);
 		hBox122.getChildren().addAll(passwordField);
 		text2.setText("Password  ");
@@ -111,96 +123,126 @@ public class Main extends Application {
 		Text text3 = new Text();
 		hBox22.getChildren().setAll(text3);
 		text3.setText("Create account");
-		text3.setOnMouseEntered(e->{
+		text3.setOnMouseEntered(e -> {
 			text3.setFill(Color.BLACK);
 		});
-		text3.setOnMouseExited(e->{
-			
-		text3.setFill(Color.BLUE);
+		text3.setOnMouseExited(e -> {
+
+			text3.setFill(Color.BLUE);
 		});
 		text3.setFill(Color.BLUE);
 
-		
 		stage.requestFocus();
 
 		root.setCenter(vBox1);
 		root.setBottom(vBox2);
-		
-		
+
 		logiButton.setOnAction(e -> {
 			// Next home page method
-			
-				this.homePage(stage);
-			
-					
-			
+
+			this.homePage(stage);
+
 		});
 	}
 
-	public Boolean alert (String question){
+	public Boolean alert(String question) {
 		Alert al = new Alert(AlertType.CONFIRMATION);
-		
+
 		al.setHeaderText(question);
 
 		Optional<ButtonType> result = al.showAndWait();
 
-		if(result.isPresent()&&result.get()==ButtonType.OK){
+		if (result.isPresent() && result.get() == ButtonType.OK) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 
 	}
 
 	public void homePage(Stage stage) {
+		screen = Screen.HOME;
 		BorderPane root = new BorderPane();
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		
-		Image backgroundImage = new Image("/images/homepage.jpeg");
-		BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO , false, false, false, true);
-		BackgroundImage backgroundImg = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
-		root.setBackground(new Background(backgroundImg));
-		
 		VBox vBox3 = new VBox();
-		vBox3.setSpacing(20); //button spacing
-		vBox3.setPrefWidth(170);
-		vBox3.setTranslateX(40); //vBox position on stage
-		vBox3.setTranslateY(300);
+		vBox3.setSpacing(10);
+		vBox3.setPrefWidth(200);
+		vBox3.setTranslateX(20);
+		vBox3.setTranslateY(20);
 		vBox3.setAlignment(Pos.TOP_LEFT);
-					
+
 		Button viewTransaction = new Button("View Transaction");
 		Button categoriseTransaction = new Button("Categorise Transaction");
 		Button spendingReport = new Button("Detailed Spending Report");
 		Button settingsButton = new Button("Settings");
-		
-		//home Buttons width all set to vBox width
 		viewTransaction.setMaxWidth(vBox3.getPrefWidth());
 		categoriseTransaction.setMaxWidth(vBox3.getPrefWidth());
 		spendingReport.setMaxWidth(vBox3.getPrefWidth());
 		settingsButton.setMaxWidth(vBox3.getPrefWidth());
-		
-		//home Buttons height size
-		double buttonHeight = 40;
-		viewTransaction.setPrefHeight(buttonHeight);
-		categoriseTransaction.setPrefHeight(buttonHeight);
-		spendingReport.setPrefHeight(buttonHeight);
-		settingsButton.setPrefHeight(buttonHeight);
-		
-		//home Buttons font size
-		Font buttonFont = new Font(14);  
-		viewTransaction.setFont(buttonFont);
-		categoriseTransaction.setFont(buttonFont);
-		spendingReport.setFont(buttonFont);
-		settingsButton.setFont(buttonFont);
+
+		Button back = new Button("Back");
 
 		vBox3.getChildren().addAll(viewTransaction, categoriseTransaction, spendingReport, settingsButton);
 		
-		root.setCenter(vBox3);
-		
-	
+		GridPane mainBox = new GridPane();
+		mainBox.getChildren().add(vBox3);
+		GridPane.setColumnIndex(mainBox, 0);
+		mainBox.getColumnConstraints().add(new ColumnConstraints(200));
+		root.setCenter(mainBox);
+
+		viewTransaction.setOnAction(e -> {
+			if (screen != Screen.VIEWTRANSACTION) {
+				screen = Screen.VIEWTRANSACTION;
+				VBox VBOXX = showTransactions();
+				VBOXX.setPrefHeight(height);
+				VBOXX.setPrefWidth(width);
+				VBOXX.getChildren().add(back);
+				mainBox.getChildren().add(VBOXX);
+				GridPane.setColumnIndex(VBOXX, 1);
+				mainBox.getColumnConstraints().add(new ColumnConstraints(1000));
+				back.setOnAction(ei -> {
+					mainBox.getChildren().remove(VBOXX);
+					screen = Screen.HOME;
+				});
+			}
+		});
 	}
-	
+
+	public VBox showTransactions() {
+
+		VBox vb = new VBox();
+
+		TableView<TransactionVisual> table = new TableView<TransactionVisual>();
+		table.setPrefWidth(vb.getWidth());
+
+		TableColumn firstColumn = new TableColumn("Date");
+		firstColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("transactionTitle"));
+		TableColumn SecondColumn = new TableColumn("Transaction Detail");
+		SecondColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("date"));
+		TableColumn thirdColumn = new TableColumn("Amount");
+		thirdColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("amount"));
+		TableColumn fourthColumn = new TableColumn("type");
+		thirdColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("purchase"));
+		TableColumn fifthColumn = new TableColumn("category");
+		thirdColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("category"));
+
+		vb.getChildren().addAll(table);
+
+		table.setEditable(true);
+
+		table.getColumns().addAll(firstColumn, SecondColumn, thirdColumn, fourthColumn, fifthColumn);
+
+		ObservableList<TransactionVisual> items1 = FXCollections
+				.observableArrayList((new Transaction("food", new Date(1, 1, 1), 30, true, TransactionCategory.NONE))
+						.generateTransactionVisual());
+
+//		table.getItems().addAll(items1);
+		return vb;
+
+	}
+
 	public static void main(String[] args) {
 		launch(args);
 	}
