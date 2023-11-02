@@ -214,19 +214,19 @@ public class Main extends Application {
 
 		VBox vb = new VBox();
 
-		TableView<TransactionVisual> table = new TableView<TransactionVisual>();
+		TableView<Transaction> table = new TableView<Transaction>();
 		table.setPrefWidth(vb.getWidth());
 
-		TableColumn firstColumn = new TableColumn("Date");
-		firstColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("transactionTitle"));
-		TableColumn SecondColumn = new TableColumn("Transaction Detail");
-		SecondColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("date"));
-		TableColumn thirdColumn = new TableColumn("Amount");
-		thirdColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("amount"));
-		TableColumn fourthColumn = new TableColumn("type");
-		thirdColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("purchase"));
-		TableColumn fifthColumn = new TableColumn("category");
-		thirdColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("category"));
+		TableColumn<Transaction,String> firstColumn = new TableColumn<>("Date");
+		firstColumn.setCellValueFactory(n -> n.getValue().generateTransactionVisual().getDate());
+		TableColumn<Transaction,String> SecondColumn = new TableColumn<>("Transaction Detail");
+		SecondColumn.setCellValueFactory(n ->n.getValue().generateTransactionVisual().getTransactionTitle());
+		TableColumn<Transaction,String> thirdColumn = new TableColumn<>("Amount");
+		thirdColumn.setCellValueFactory(n->n.getValue().generateTransactionVisual().getAmount());
+		TableColumn<Transaction,String> fourthColumn = new TableColumn<>("type");
+		fourthColumn.setCellValueFactory(n->n.getValue().generateTransactionVisual().getPurchase());
+		TableColumn<Transaction,String> fifthColumn = new TableColumn<>("category");
+		fifthColumn.setCellValueFactory(n->n.getValue().generateTransactionVisual().getCategory());
 
 		vb.getChildren().addAll(table);
 
@@ -234,11 +234,11 @@ public class Main extends Application {
 
 		table.getColumns().addAll(firstColumn, SecondColumn, thirdColumn, fourthColumn, fifthColumn);
 
-		ObservableList<TransactionVisual> items1 = FXCollections
+		ObservableList<Transaction> items1 = FXCollections
 				.observableArrayList((new Transaction("food", new Date(1, 1, 1), 30, true, TransactionCategory.NONE))
-						.generateTransactionVisual());
+						);
 
-//		table.getItems().addAll(items1);
+		table.getItems().addAll(items1);
 		return vb;
 
 	}
