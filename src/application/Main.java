@@ -3,11 +3,15 @@ package application;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.net.URISyntaxException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import backend.Date;
 import backend.Transaction;
 import backend.TransactionCategory;
+import backend.TransactionImporter;
 import backend.TransactionVisual;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -268,8 +272,21 @@ public class Main extends Application {
 
 		table.getColumns().addAll(firstColumn, SecondColumn, thirdColumn, fourthColumn, fifthColumn);
 
-		ObservableList<Transaction> items1 = FXCollections.observableArrayList((new Transaction("food", new Date(1, 1, 1), 30, true, TransactionCategory.NONE))
-						);
+
+		ObservableList<Transaction> items1 = FXCollections
+				.observableArrayList();
+		
+		
+		try {
+			TransactionImporter importer = new TransactionImporter(new File("transactions"));
+			ArrayList<Transaction> transactions = importer.getTransactions();
+			items1.addAll(transactions);
+		}
+		catch (FileNotFoundException error) {
+			items1.add((new Transaction("food", new Date(1, 1, 1), 30, true, TransactionCategory.NONE)));
+			System.out.println("Error: transaction file not found");
+		}
+		
 
 		table.getItems().addAll(items1);
 		return vb;
