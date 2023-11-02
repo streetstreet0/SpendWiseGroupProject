@@ -16,12 +16,15 @@ import backend.TransactionVisual;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -232,28 +235,68 @@ public class Main extends Application {
 		viewTransaction.setOnAction(e -> {
 			if (screen != Screen.VIEWTRANSACTION) {
 				screen = Screen.VIEWTRANSACTION;
-				VBox VBOXX = showTransactions();
-				VBOXX.setPrefHeight(height);
-				VBOXX.setPrefWidth(width);
-				VBOXX.getChildren().add(back);
-				VBOXX.getChildren().add(categoriseTransaction);
-				mainBox.getChildren().add(VBOXX);
-				GridPane.setColumnIndex(VBOXX, 1);
+				VBox transactionVBox = new VBox();
+				TableView<Transaction> table = showTransactions();
+				
+				transactionVBox.setPrefHeight(height);
+				transactionVBox.setPrefWidth(width);
+				transactionVBox.getChildren().add(table);
+				transactionVBox.getChildren().add(back);
+				transactionVBox.getChildren().add(categoriseTransaction);
+				mainBox.getChildren().add(transactionVBox);
+				GridPane.setColumnIndex(transactionVBox, 1);
 				mainBox.getColumnConstraints().add(new ColumnConstraints(1000));
-				back.setOnAction(ei -> {
-					mainBox.getChildren().remove(VBOXX);
-					screen = Screen.HOME;
+				table.setPrefWidth(transactionVBox.getWidth());
+				
+				back.setOnAction(new EventHandler<ActionEvent>() {
+					
+					@Override
+					public void handle(ActionEvent event) {
+						mainBox.getChildren().remove(transactionVBox);
+						screen = Screen.HOME;
+					}
+				});
+				
+				categoriseTransaction.setOnAction(new EventHandler<ActionEvent>() {
+
+					@Override
+					public void handle(ActionEvent event) {
+						Transaction selectedTransaction = table.getSelectionModel().getSelectedItem();
+						if (selectedTransaction != null) {
+							Alert changeCategoryAlert = new Alert(AlertType.CONFIRMATION);
+							changeCategoryAlert.setTitle("Change Category");
+							changeCategoryAlert.setHeaderText("Change the Category of the following transaction to:");
+							changeCategoryAlert.setContentText(selectedTransaction.toString());
+							
+							
+							ObservableList<TransactionCategory> categories = FXCollections.observableArrayList();
+							categories.addAll(TransactionCategory.NONE, TransactionCategory.NEED, TransactionCategory.WANT, TransactionCategory.LUXURY);
+							ComboBox<TransactionCategory> categoryBox = new ComboBox<TransactionCategory>(categories);
+							changeCategoryAlert.setGraphic(categoryBox);
+							
+							changeCategoryAlert.showAndWait();
+							
+							TransactionCategory category = categoryBox.getValue();
+							if (changeCategoryAlert.getResult().getText().equals("Cancel") || category == null) {
+								return;
+							}	
+							else {
+								selectedTransaction.setCategory(category);
+								screen = Screen.CATEGORISETRANSACTION;
+								EventHandler<ActionEvent> viewTransactionEvent = viewTransaction.getOnAction();
+								homePage(stage);
+								viewTransactionEvent.handle(e);
+							}
+						}
+					}
+					
 				});
 			}
 		});
 	}
 
-	public VBox showTransactions() {
-
-		VBox vb = new VBox();
-
+	public TableView<Transaction> showTransactions() {
 		TableView<Transaction> table = new TableView<Transaction>();
-		table.setPrefWidth(vb.getWidth());
 
 		TableColumn<Transaction,String> firstColumn = new TableColumn<>("Date");
 		firstColumn.setCellValueFactory(n -> n.getValue().generateTransactionVisual().getDate());
@@ -266,14 +309,11 @@ public class Main extends Application {
 		TableColumn<Transaction,String> fifthColumn = new TableColumn<>("category");
 		fifthColumn.setCellValueFactory(n->n.getValue().generateTransactionVisual().getCategory());
 
-		vb.getChildren().addAll(table);
-
 		table.setEditable(true);
 
 		table.getColumns().addAll(firstColumn, SecondColumn, thirdColumn, fourthColumn, fifthColumn);
 
-		ObservableList<Transaction> items1 = FXCollections
-				.observableArrayList();
+		ObservableList<Transaction> items1 = FXCollections.observableArrayList();
 		
 		
 		try {
@@ -288,7 +328,7 @@ public class Main extends Application {
 		
 
 		table.getItems().addAll(items1);
-		return vb;
+		return table;
 
 	}
 
