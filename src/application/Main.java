@@ -2,6 +2,7 @@ package application;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.net.URISyntaxException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -174,21 +175,48 @@ public class Main extends Application {
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		
+
+		Image backgroundImage = null;
+		try {
+			backgroundImage = new Image(getClass().getResource("/images/homepage.jpeg").toURI().toString());
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO , false, false, false, true);
+		BackgroundImage backgroundImg = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
+		root.setBackground(new Background(backgroundImg));
+		
 		VBox vBox3 = new VBox();
-		vBox3.setSpacing(10);
-		vBox3.setPrefWidth(200);
-		vBox3.setTranslateX(20);
-		vBox3.setTranslateY(20);
+		vBox3.setSpacing(20); //button spacing
+		vBox3.setPrefWidth(170);
+		vBox3.setTranslateX(40); //vBox position on stage
+		vBox3.setTranslateY(300);
 		vBox3.setAlignment(Pos.TOP_LEFT);
 
 		Button viewTransaction = new Button("View Transaction");
 		Button categoriseTransaction = new Button("Categorise Transaction");
 		Button spendingReport = new Button("Detailed Spending Report");
 		Button settingsButton = new Button("Settings");
+		//home Buttons width all set to vBox width
 		viewTransaction.setMaxWidth(vBox3.getPrefWidth());
 		categoriseTransaction.setMaxWidth(vBox3.getPrefWidth());
 		spendingReport.setMaxWidth(vBox3.getPrefWidth());
 		settingsButton.setMaxWidth(vBox3.getPrefWidth());
+		
+		//home Buttons height size
+		double buttonHeight = 40;
+		viewTransaction.setPrefHeight(buttonHeight);
+		categoriseTransaction.setPrefHeight(buttonHeight);
+		spendingReport.setPrefHeight(buttonHeight);
+		settingsButton.setPrefHeight(buttonHeight);
+		
+		//home Buttons font size
+		Font buttonFont = new Font(14);  
+		viewTransaction.setFont(buttonFont);
+		categoriseTransaction.setFont(buttonFont);
+		spendingReport.setFont(buttonFont);
+		settingsButton.setFont(buttonFont);
 
 		Button back = new Button("Back");
 
