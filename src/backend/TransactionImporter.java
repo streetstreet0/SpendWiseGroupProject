@@ -85,6 +85,7 @@ public class TransactionImporter {
 		}
 		
 		print.close();
+	}
 	
 	/**
 	 * Saves an ArrayList of Transaction objects to a specified file with a ".sw" extension.
