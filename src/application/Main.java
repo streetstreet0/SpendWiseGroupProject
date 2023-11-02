@@ -177,7 +177,8 @@ public class Main extends Application {
 		settingsButton.setMaxWidth(vBox3.getPrefWidth());
 		Button back = new Button("Back");
 
-		vBox3.getChildren().addAll(viewTransaction, categoriseTransaction, spendingReport, settingsButton);
+		vBox3.getChildren().addAll(viewTransaction, spendingReport, settingsButton);
+		// , categoriseTransaction
 		
 		GridPane mainBox = new GridPane();
 		mainBox.getChildren().add(vBox3);
@@ -192,6 +193,7 @@ public class Main extends Application {
 				VBOXX.setPrefHeight(height);
 				VBOXX.setPrefWidth(width);
 				VBOXX.getChildren().add(back);
+				VBOXX.getChildren().add(categoriseTransaction);
 				mainBox.getChildren().add(VBOXX);
 				GridPane.setColumnIndex(VBOXX, 1);
 				mainBox.getColumnConstraints().add(new ColumnConstraints(1000));
