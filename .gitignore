@@ -2,3 +2,5 @@
 build.fxbuild
 /.project
 /bin/
+/gitignore
+/project
