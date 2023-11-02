@@ -8,7 +8,6 @@ import java.util.Optional;
 import backend.Date;
 import backend.Transaction;
 import backend.TransactionCategory;
-import backend.TransactionVisual;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,14 +21,12 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -170,7 +167,6 @@ public class Main extends Application {
 		BorderPane root = new BorderPane();
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
-		
 
 		Image backgroundImage = null;
 		try {
@@ -179,14 +175,16 @@ public class Main extends Application {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO , false, false, false, true);
-		BackgroundImage backgroundImg = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
+		BackgroundSize backgroundSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false,
+				false, true);
+		BackgroundImage backgroundImg = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT,
+				BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
 		root.setBackground(new Background(backgroundImg));
-		
+
 		VBox vBox3 = new VBox();
-		vBox3.setSpacing(20); //button spacing
+		vBox3.setSpacing(20); // button spacing
 		vBox3.setPrefWidth(170);
-		vBox3.setTranslateX(40); //vBox position on stage
+		vBox3.setTranslateX(40); // vBox position on stage
 		vBox3.setTranslateY(300);
 		vBox3.setAlignment(Pos.TOP_LEFT);
 
@@ -194,21 +192,21 @@ public class Main extends Application {
 		Button categoriseTransaction = new Button("Categorise Transaction");
 		Button spendingReport = new Button("Detailed Spending Report");
 		Button settingsButton = new Button("Settings");
-		//home Buttons width all set to vBox width
+		// home Buttons width all set to vBox width
 		viewTransaction.setMaxWidth(vBox3.getPrefWidth());
 		categoriseTransaction.setMaxWidth(vBox3.getPrefWidth());
 		spendingReport.setMaxWidth(vBox3.getPrefWidth());
 		settingsButton.setMaxWidth(vBox3.getPrefWidth());
-		
-		//home Buttons height size
+
+		// home Buttons height size
 		double buttonHeight = 40;
 		viewTransaction.setPrefHeight(buttonHeight);
 		categoriseTransaction.setPrefHeight(buttonHeight);
 		spendingReport.setPrefHeight(buttonHeight);
 		settingsButton.setPrefHeight(buttonHeight);
-		
-		//home Buttons font size
-		Font buttonFont = new Font(14);  
+
+		// home Buttons font size
+		Font buttonFont = new Font(14);
 		viewTransaction.setFont(buttonFont);
 		categoriseTransaction.setFont(buttonFont);
 		spendingReport.setFont(buttonFont);
@@ -218,7 +216,7 @@ public class Main extends Application {
 
 		vBox3.getChildren().addAll(viewTransaction, spendingReport, settingsButton);
 		// , categoriseTransaction
-		
+
 		GridPane mainBox = new GridPane();
 		mainBox.getChildren().add(vBox3);
 		GridPane.setColumnIndex(mainBox, 0);
@@ -251,26 +249,27 @@ public class Main extends Application {
 		TableView<Transaction> table = new TableView<Transaction>();
 		table.setPrefWidth(vb.getWidth());
 
-		TableColumn<Transaction,String> firstColumn = new TableColumn<>("Date");
+		TableColumn<Transaction, String> firstColumn = new TableColumn<>("Date");
 		firstColumn.setCellValueFactory(n -> n.getValue().generateTransactionVisual().getDate());
-		TableColumn<Transaction,String> SecondColumn = new TableColumn<>("Transaction Detail");
-		SecondColumn.setCellValueFactory(n ->n.getValue().generateTransactionVisual().getTransactionTitle());
-		TableColumn<Transaction,String> thirdColumn = new TableColumn<>("Amount");
-		thirdColumn.setCellValueFactory(n->n.getValue().generateTransactionVisual().getAmount());
-		TableColumn<Transaction,String> fourthColumn = new TableColumn<>("type");
-		fourthColumn.setCellValueFactory(n->n.getValue().generateTransactionVisual().getPurchase());
-		TableColumn<Transaction,String> fifthColumn = new TableColumn<>("category");
-		fifthColumn.setCellValueFactory(n->n.getValue().generateTransactionVisual().getCategory());
+		TableColumn<Transaction, String> SecondColumn = new TableColumn<>("Transaction Detail");
+		SecondColumn.setCellValueFactory(n -> n.getValue().generateTransactionVisual().getTransactionTitle());
+		TableColumn<Transaction, String> thirdColumn = new TableColumn<>("Amount");
+		thirdColumn.setCellValueFactory(n -> n.getValue().generateTransactionVisual().getAmount());
+		TableColumn<Transaction, String> fourthColumn = new TableColumn<>("type");
+		fourthColumn.setCellValueFactory(n -> n.getValue().generateTransactionVisual().getPurchase());
+		TableColumn<Transaction, String> fifthColumn = new TableColumn<>("category");
+		fifthColumn.setCellValueFactory(n -> n.getValue().generateTransactionVisual().getCategory());
 
 		vb.getChildren().addAll(table);
 
 		table.setEditable(true);
 
+		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
 		table.getColumns().addAll(firstColumn, SecondColumn, thirdColumn, fourthColumn, fifthColumn);
 
 		ObservableList<Transaction> items1 = FXCollections
-				.observableArrayList((new Transaction("food", new Date(1, 1, 1), 30, true, TransactionCategory.NONE))
-						);
+				.observableArrayList((new Transaction("food", new Date(1, 1, 1), 30, true, TransactionCategory.NONE)));
 
 		table.getItems().addAll(items1);
 		return vb;
