@@ -25,24 +25,24 @@ public class TransactionVisual {
 		this.category = category;
 	}
 
-	public String getTransactionTitle() {
-		return transactionTitle.get();
+	public StringProperty getTransactionTitle() {
+		return transactionTitle;
 	}
 
-	public String getDate() {
-		return date.get();
+	public StringProperty getDate() {
+		return date;
 	}
 
-	public String getAmount() {
-		return amount.get();
+	public StringProperty getAmount() {
+		return amount;
 	}
 
-	public String getPurchase() {
-		return purchase.get();
+	public StringProperty getPurchase() {
+		return purchase;
 	}
 
-	public String getCategory() {
-		return category.get();
+	public StringProperty getCategory() {
+		return category;
 	}
 
 }
