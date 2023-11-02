@@ -214,7 +214,7 @@ public class Main extends Application {
 		fifthColumn.setCellValueFactory(n->n.getValue().generateTransactionVisual().getCategory());
 
 		vb.getChildren().addAll(table);
-
+		
 		table.setEditable(true);
 
 		table.getColumns().addAll(firstColumn, SecondColumn, thirdColumn, fourthColumn, fifthColumn);

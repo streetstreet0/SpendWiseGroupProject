@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * TransactionImporter deals with the importing and exporting of transaction data to/from a text file.
+ * TransactionImporter deals with the importing and exporting of transaction data to/from a text file.1
  */
 public class TransactionImporter {
 	private File transactionFile; // this is the file that the transactions are stored in

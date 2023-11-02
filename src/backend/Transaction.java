@@ -16,6 +16,7 @@ public class Transaction {
 		this.amount = amount;
 		this.purchase = purchase;
 		this.category = category;
+		//1
 	}
 
 	public String getTransactionTitle() {
