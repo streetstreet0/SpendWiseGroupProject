@@ -227,8 +227,7 @@ public class Main extends Application {
 			if (screen != Screen.VIEWTRANSACTION) {
 				screen = Screen.VIEWTRANSACTION;
 				VBox VBOXX = showTransactions();
-				VBOXX.setPrefHeight(height);
-				VBOXX.setPrefWidth(width);
+
 				VBOXX.getChildren().add(back);
 				VBOXX.getChildren().add(categoriseTransaction);
 				mainBox.getChildren().add(VBOXX);
@@ -248,6 +247,9 @@ public class Main extends Application {
 
 		TableView<Transaction> table = new TableView<Transaction>();
 		table.setPrefWidth(vb.getWidth());
+
+		table.setPrefHeight(1900);
+		table.setPrefWidth(1800);
 
 		TableColumn<Transaction, String> firstColumn = new TableColumn<>("Date");
 		firstColumn.setCellValueFactory(n -> n.getValue().generateTransactionVisual().getDate());
