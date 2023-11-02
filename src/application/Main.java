@@ -159,7 +159,6 @@ public class Main extends Application {
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		
-		System.out.println("Working Directory = " + System.getProperty("user.dir"));
 		Image backgroundImage = null;
 		try {
 			backgroundImage = new Image(getClass().getResource("/images/homepage.jpeg").toURI().toString());
