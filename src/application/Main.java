@@ -22,6 +22,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -169,21 +171,27 @@ public class Main extends Application {
 		spendingReport.setMaxWidth(vBox3.getPrefWidth());
 		settingsButton.setMaxWidth(vBox3.getPrefWidth());
 		Button back = new Button("Back");
+		
 
 		vBox3.getChildren().addAll(viewTransaction, categoriseTransaction, spendingReport, settingsButton);
 
 		root.setCenter(vBox3);
-
+		VBox VBOXX = showTransactions();
+		
+			back.setOnAction(e ->{
+				vBox3.getChildren().remove(VBOXX);
+			});
+		Background hold = viewTransaction.getBackground();
+		System.out.println("Initial viewTransaction background: " + viewTransaction.getBackground());
 		viewTransaction.setOnAction(e -> {
-
-			VBox VBOXX = showTransactions();
+			
+			Boolean check = vBox3.getChildren().contains(VBOXX);
+			if(!check){
 			VBOXX.setPrefHeight(height);
 			VBOXX.setPrefWidth(width);
 			vBox3.getChildren().add(VBOXX);
 			VBOXX.getChildren().add(back);
-			back.setOnAction(ei -> {
-				vBox3.getChildren().remove(VBOXX);
-			});
+			}
 		});
 	}
 
@@ -191,19 +199,19 @@ public class Main extends Application {
 
 		VBox vb = new VBox();
 
-		TableView<TransactionVisual> table = new TableView<TransactionVisual>();
+		TableView<Transaction> table = new TableView<Transaction>();
 		table.setPrefWidth(vb.getWidth());
 
-		TableColumn firstColumn = new TableColumn("Date");
-		firstColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("transactionTitle"));
-		TableColumn SecondColumn = new TableColumn("Transaction Detail");
-		SecondColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("date"));
-		TableColumn thirdColumn = new TableColumn("Amount");
-		thirdColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("amount"));
-		TableColumn fourthColumn = new TableColumn("type");
-		thirdColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("purchase"));
-		TableColumn fifthColumn = new TableColumn("category");
-		thirdColumn.setCellValueFactory(new PropertyValueFactory<TransactionVisual, String>("category"));
+		TableColumn<Transaction,String> firstColumn = new TableColumn<>("Date");
+		firstColumn.setCellValueFactory(n -> n.getValue().generateTransactionVisual().getDate());
+		TableColumn<Transaction,String> SecondColumn = new TableColumn<>("Transaction Detail");
+		SecondColumn.setCellValueFactory(n ->n.getValue().generateTransactionVisual().getTransactionTitle());
+		TableColumn<Transaction,String> thirdColumn = new TableColumn<>("Amount");
+		thirdColumn.setCellValueFactory(n->n.getValue().generateTransactionVisual().getAmount());
+		TableColumn<Transaction,String> fourthColumn = new TableColumn<>("type");
+		fourthColumn.setCellValueFactory(n->n.getValue().generateTransactionVisual().getPurchase());
+		TableColumn<Transaction,String> fifthColumn = new TableColumn<>("category");
+		fifthColumn.setCellValueFactory(n->n.getValue().generateTransactionVisual().getCategory());
 
 		vb.getChildren().addAll(table);
 
@@ -211,9 +219,9 @@ public class Main extends Application {
 
 		table.getColumns().addAll(firstColumn, SecondColumn, thirdColumn, fourthColumn, fifthColumn);
 
-		ObservableList<TransactionVisual> items1 = FXCollections
+		ObservableList<Transaction> items1 = FXCollections
 				.observableArrayList((new Transaction("food", new Date(1, 1, 1), 30, true, TransactionCategory.NONE))
-						.generateTransactionVisual());
+						);
 
 		table.getItems().addAll(items1);
 		return vb;
