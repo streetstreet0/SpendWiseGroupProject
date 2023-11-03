@@ -9,6 +9,7 @@ public class Transaction {
 	private double amount;
 	private boolean purchase;
 	private TransactionCategory category;
+	private TransactionVisual visual;
 
 	public Transaction(String transactionTitle, Date date, double amount, boolean purchase, TransactionCategory category) {
 		this.transactionTitle = transactionTitle;
@@ -40,6 +41,9 @@ public class Transaction {
 
 	public void setCategory(TransactionCategory category) {
 		this.category = category;
+		if (visual != null) {
+			this.visual.setCategory(category.toString());
+		}
 	}
 	
 	@Override
@@ -77,7 +81,8 @@ public class Transaction {
 			purchase = new SimpleStringProperty(this, "purchase", "Income");
 		}
 		StringProperty category = new SimpleStringProperty(this, "category", this.category.toString());
-		return new TransactionVisual(transactionTitle, date, amount, purchase, category);
+		visual = new TransactionVisual(transactionTitle, date, amount, purchase, category);
+		return visual;
 	}
 
 }

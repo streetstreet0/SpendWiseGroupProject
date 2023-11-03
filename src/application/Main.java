@@ -236,6 +236,7 @@ public class Main extends Application {
 				
 				VBox transactionVBox = new VBox();
 				TableView<Transaction> table = showTransactions();
+				table.setEditable(true);
 				
 				transactionVBox.setPrefHeight(height);
 				transactionVBox.setPrefWidth(width);
@@ -281,10 +282,10 @@ public class Main extends Application {
 							}	
 							else {
 								selectedTransaction.setCategory(category);
-								screen = Screen.CATEGORISETRANSACTION;
-								EventHandler<ActionEvent> viewTransactionEvent = viewTransaction.getOnAction();
-								homePage(stage);
-								viewTransactionEvent.handle(e);
+//								screen = Screen.CATEGORISETRANSACTION;
+//								EventHandler<ActionEvent> viewTransactionEvent = viewTransaction.getOnAction();
+//								homePage(stage);
+//								viewTransactionEvent.handle(e);
 							}
 						}
 					}
