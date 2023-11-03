@@ -12,6 +12,7 @@ import backend.Date;
 import backend.Transaction;
 import backend.TransactionCategory;
 import backend.TransactionImporter;
+import backend.UserDataImporter;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -91,9 +92,9 @@ public class Main extends Application {
 		TextField textField1 = new TextField();
 		hBox111.getChildren().addAll(text1);
 		hBox112.getChildren().add(textField1);
-		textField1.setPromptText("Email/username");
+		textField1.setPromptText("Email/Username");
 		textField1.focusTraversableProperty();
-		text1.setText("User Name");
+		text1.setText("Username");
 
 		// Password horizontal
 		HBox hBox12 = new HBox();
@@ -114,6 +115,10 @@ public class Main extends Application {
 		hBox122.getChildren().addAll(passwordField);
 		text2.setText("Password  ");
 		passwordField.setPromptText("Password");
+		
+		Text errorText = new Text();
+		vBox1.getChildren().add(errorText);
+		errorText.setFill(Color.RED);
 
 		// Login button
 		HBox hBox21 = new HBox(), hBox22 = new HBox();
@@ -128,10 +133,10 @@ public class Main extends Application {
 		hBox21.getChildren().addAll(logiButton);
 		logiButton.setMinHeight(height * 0.03);
 		logiButton.setMinWidth(width * 0.05);
-		logiButton.setText("Login");
+		logiButton.setText("Log in");
 		Text text3 = new Text();
 		hBox22.getChildren().setAll(text3);
-		text3.setText("Create account");
+		text3.setText("Create Account");
 		text3.setOnMouseEntered(e -> {
 			text3.setFill(Color.BLACK);
 		});
@@ -147,10 +152,25 @@ public class Main extends Application {
 		root.setBottom(vBox2);
 
 		logiButton.setOnAction(e -> {
-			// Next home page method
-
-			this.homePage(stage);
-
+			String username = textField1.getText();
+			String password = passwordField.getText();
+			try {
+				UserDataImporter dataImporter = new UserDataImporter(new File("users"));
+				if (dataImporter.validUser(username, password)) {
+					// Next home page method
+					this.homePage(stage);
+					// auto updates the visuals
+					stage.setWidth(width * 0.9);
+					stage.setHeight(height * 0.9);
+				}
+				else {
+					errorText.setText("You've entered an incorrect username or password. Please Try Again.");
+				}
+				
+			}
+			catch (FileNotFoundException error) {
+				errorText.setText("An error has occured. Could not connect to the server.");
+			}
 		});
 	}
 
