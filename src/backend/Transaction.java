@@ -42,6 +42,22 @@ public class Transaction {
 		this.category = category;
 	}
 	
+	@Override
+	public String toString() {
+		String transactionString = date.toString();
+		transactionString += ", " + transactionTitle;
+		transactionString += ", $" + amount;
+		if (purchase) {
+			transactionString += ", Expense";
+		}
+		else {
+			transactionString += ", Income";
+		}
+		transactionString += ", " + category.toString();
+		
+		return transactionString;
+	}
+	
 	/**
 	 * Create a TransactionVisual for the tableview.
 	 * 
@@ -55,10 +71,10 @@ public class Transaction {
 		StringProperty amount = new SimpleStringProperty(this, "amount", "$" + this.amount);
 		StringProperty purchase;
 		if (this.purchase) {
-			purchase = new SimpleStringProperty(this, "purchase", "expense");
+			purchase = new SimpleStringProperty(this, "purchase", "Expense");
 		}
 		else {
-			purchase = new SimpleStringProperty(this, "purchase", "income");
+			purchase = new SimpleStringProperty(this, "purchase", "Income");
 		}
 		StringProperty category = new SimpleStringProperty(this, "category", this.category.toString());
 		return new TransactionVisual(transactionTitle, date, amount, purchase, category);
