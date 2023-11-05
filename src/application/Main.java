@@ -197,7 +197,7 @@ public class Main extends Application {
 
 		Image backgroundImage = null;
 		try {
-			backgroundImage = new Image(getClass().getResource("/images/homepage.jpeg").toURI().toString());
+			backgroundImage = new Image(getClass().getResource("/images/spendwiseHome.jpeg").toURI().toString());
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
