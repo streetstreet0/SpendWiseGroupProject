@@ -52,6 +52,9 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	private Screen screen;
+	private final static String userFileName = "users";
+	private final static String transactionFileName = "transactions";
+	private final static String homeImageFileName = "/images/spendwiseHome.jpeg";
 
 	Toolkit kit = Toolkit.getDefaultToolkit();
 	Dimension size = kit.getScreenSize();
@@ -155,7 +158,7 @@ public class Main extends Application {
 			String username = textField1.getText();
 			String password = passwordField.getText();
 			try {
-				UserDataImporter dataImporter = new UserDataImporter(new File("users"));
+				UserDataImporter dataImporter = new UserDataImporter(new File(userFileName));
 				if (dataImporter.validUser(username, password)) {
 					// Next home page method
 					this.homePage(stage);
@@ -197,7 +200,7 @@ public class Main extends Application {
 
 		Image backgroundImage = null;
 		try {
-			backgroundImage = new Image(getClass().getResource("/images/spendwiseHome.jpeg").toURI().toString());
+			backgroundImage = new Image(getClass().getResource(homeImageFileName).toURI().toString());
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -302,6 +305,17 @@ public class Main extends Application {
 							}	
 							else {
 								selectedTransaction.setCategory(category);
+								try {
+									TransactionImporter transactionExport = new TransactionImporter(new File(transactionFileName));
+									ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+									for (Transaction transaction : table.getItems()) {
+									transactions.add(transaction);
+									}
+									transactionExport.exportTransactionList(transactions);
+								}
+								catch (FileNotFoundException fileException) {
+									System.out.println("Error: transaction file not found. Transactions cannot be saved.");
+								}
 //								screen = Screen.CATEGORISETRANSACTION;
 //								EventHandler<ActionEvent> viewTransactionEvent = viewTransaction.getOnAction();
 //								homePage(stage);
@@ -341,7 +355,7 @@ public class Main extends Application {
 		ObservableList<Transaction> items1 = FXCollections.observableArrayList();
 
 		try {
-			TransactionImporter importer = new TransactionImporter(new File("transactions"));
+			TransactionImporter importer = new TransactionImporter(new File(transactionFileName));
 			ArrayList<Transaction> transactions = importer.getTransactions();
 			items1.addAll(transactions);
 		} catch (FileNotFoundException error) {
