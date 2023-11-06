@@ -174,7 +174,7 @@ public class Main extends Application {
 		});
 	}
 
-	public Boolean alert(String question) {
+	public boolean alert(String question) {
 		Alert al = new Alert(AlertType.CONFIRMATION);
 
 		al.setHeaderText(question);
