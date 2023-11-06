@@ -64,6 +64,16 @@ public class Main extends Application {
 		this.loginScene(stage);
 		stage.setTitle("Spend Wise");
 		stage.show();
+//--------- tiegue's codes here---------//		
+		// When closing window, call saveToFile method
+		stage.setOnCloseRequest(event -> {
+            try {
+            	TransactionImporter.saveToFile(null)/* Pass ArrayList<Transaction> here */;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        });
+//-------- tiegue's codes above--------//
 
 	}
 
@@ -150,8 +160,18 @@ public class Main extends Application {
 			// Next home page method
 
 			this.homePage(stage);
+			
+//--------- tiegue's codes here---------//		
+			//Once login successful, load transactions from file
+			try {
+				TransactionImporter.loadFromFile();
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 
 		});
+//-------- tiegue's codes above--------//
 	}
 
 	public Boolean alert(String question) {
