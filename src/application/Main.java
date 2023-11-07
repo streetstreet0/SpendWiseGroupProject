@@ -12,15 +12,19 @@ import backend.Date;
 import backend.Transaction;
 import backend.TransactionCategory;
 import backend.TransactionImporter;
+import backend.UserDataImporter;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -48,6 +52,9 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	private Screen screen;
+	private final static String userFileName = "users";
+	private final static String transactionFileName = "transactions";
+	private final static String homeImageFileName = "/images/spendwiseHome.jpeg";
 
 	Toolkit kit = Toolkit.getDefaultToolkit();
 	Dimension size = kit.getScreenSize();
@@ -88,9 +95,9 @@ public class Main extends Application {
 		TextField textField1 = new TextField();
 		hBox111.getChildren().addAll(text1);
 		hBox112.getChildren().add(textField1);
-		textField1.setPromptText("Email/username");
+		textField1.setPromptText("Email/Username");
 		textField1.focusTraversableProperty();
-		text1.setText("User Name");
+		text1.setText("Username");
 
 		// Password horizontal
 		HBox hBox12 = new HBox();
@@ -111,6 +118,10 @@ public class Main extends Application {
 		hBox122.getChildren().addAll(passwordField);
 		text2.setText("Password  ");
 		passwordField.setPromptText("Password");
+		
+		Text errorText = new Text();
+		vBox1.getChildren().add(errorText);
+		errorText.setFill(Color.RED);
 
 		// Login button
 		HBox hBox21 = new HBox(), hBox22 = new HBox();
@@ -125,10 +136,10 @@ public class Main extends Application {
 		hBox21.getChildren().addAll(logiButton);
 		logiButton.setMinHeight(height * 0.03);
 		logiButton.setMinWidth(width * 0.05);
-		logiButton.setText("Login");
+		logiButton.setText("Log in");
 		Text text3 = new Text();
 		hBox22.getChildren().setAll(text3);
-		text3.setText("Create account");
+		text3.setText("Create Account");
 		text3.setOnMouseEntered(e -> {
 			text3.setFill(Color.BLACK);
 		});
@@ -144,14 +155,29 @@ public class Main extends Application {
 		root.setBottom(vBox2);
 
 		logiButton.setOnAction(e -> {
-			// Next home page method
-
-			this.homePage(stage);
-
+			String username = textField1.getText();
+			String password = passwordField.getText();
+			try {
+				UserDataImporter dataImporter = new UserDataImporter(new File(userFileName));
+				if (dataImporter.validUser(username, password)) {
+					// Next home page method
+					this.homePage(stage);
+					// auto updates the visuals
+					stage.setWidth(width * 0.9);
+					stage.setHeight(height * 0.9);
+				}
+				else {
+					errorText.setText("You've entered an incorrect username or password. Please Try Again.");
+				}
+				
+			}
+			catch (FileNotFoundException error) {
+				errorText.setText("An error has occured. Could not connect to the server.");
+			}
 		});
 	}
 
-	public Boolean alert(String question) {
+	public boolean alert(String question) {
 		Alert al = new Alert(AlertType.CONFIRMATION);
 
 		al.setHeaderText(question);
@@ -174,7 +200,7 @@ public class Main extends Application {
 
 		Image backgroundImage = null;
 		try {
-			backgroundImage = new Image(getClass().getResource("/images/homepage.jpeg").toURI().toString());
+			backgroundImage = new Image(getClass().getResource(homeImageFileName).toURI().toString());
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -230,27 +256,81 @@ public class Main extends Application {
 		viewTransaction.setOnAction(e -> {
 			if (screen != Screen.VIEWTRANSACTION) {
 				screen = Screen.VIEWTRANSACTION;
-				VBox VBOXX = showTransactions();
-
-				VBOXX.getChildren().add(back);
-				VBOXX.getChildren().add(categoriseTransaction);
-				mainBox.getChildren().add(VBOXX);
-				GridPane.setColumnIndex(VBOXX, 1);
+				
+				VBox transactionVBox = new VBox();
+				TableView<Transaction> table = showTransactions();
+				table.setEditable(true);
+				
+				transactionVBox.setPrefHeight(height);
+				transactionVBox.setPrefWidth(width);
+				transactionVBox.getChildren().add(table);
+				transactionVBox.getChildren().add(back);
+				transactionVBox.getChildren().add(categoriseTransaction);
+				mainBox.getChildren().add(transactionVBox);
+				GridPane.setColumnIndex(transactionVBox, 1);
 				mainBox.getColumnConstraints().add(new ColumnConstraints(1000));
-				back.setOnAction(ei -> {
-					mainBox.getChildren().remove(VBOXX);
-					screen = Screen.HOME;
+				table.setPrefWidth(transactionVBox.getWidth());
+				
+				back.setOnAction(new EventHandler<ActionEvent>() {
+					
+					@Override
+					public void handle(ActionEvent event) {
+						mainBox.getChildren().remove(transactionVBox);
+						screen = Screen.HOME;
+					}
+				});
+				
+				categoriseTransaction.setOnAction(new EventHandler<ActionEvent>() {
+
+					@Override
+					public void handle(ActionEvent event) {
+						Transaction selectedTransaction = table.getSelectionModel().getSelectedItem();
+						if (selectedTransaction != null) {
+							Alert changeCategoryAlert = new Alert(AlertType.CONFIRMATION);
+							changeCategoryAlert.setTitle("Change Category");
+							changeCategoryAlert.setHeaderText("Change the Category of the following transaction to:");
+							changeCategoryAlert.setContentText(selectedTransaction.toString());
+							
+							
+							ObservableList<TransactionCategory> categories = FXCollections.observableArrayList();
+							categories.addAll(TransactionCategory.NONE, TransactionCategory.NEED, TransactionCategory.WANT, TransactionCategory.LUXURY);
+							ComboBox<TransactionCategory> categoryBox = new ComboBox<TransactionCategory>(categories);
+							changeCategoryAlert.setGraphic(categoryBox);
+							
+							changeCategoryAlert.showAndWait();
+							
+							TransactionCategory category = categoryBox.getValue();
+							if (changeCategoryAlert.getResult().getText().equals("Cancel") || category == null) {
+								return;
+							}	
+							else {
+								selectedTransaction.setCategory(category);
+								try {
+									TransactionImporter transactionExport = new TransactionImporter(new File(transactionFileName));
+									ArrayList<Transaction> transactions = new ArrayList<Transaction>();
+									for (Transaction transaction : table.getItems()) {
+									transactions.add(transaction);
+									}
+									transactionExport.exportTransactionList(transactions);
+								}
+								catch (FileNotFoundException fileException) {
+									System.out.println("Error: transaction file not found. Transactions cannot be saved.");
+								}
+//								screen = Screen.CATEGORISETRANSACTION;
+//								EventHandler<ActionEvent> viewTransactionEvent = viewTransaction.getOnAction();
+//								homePage(stage);
+//								viewTransactionEvent.handle(e);
+							}
+						}
+					}
+					
 				});
 			}
 		});
 	}
 
-	public VBox showTransactions() {
-
-		VBox vb = new VBox();
-
+	public TableView<Transaction> showTransactions() {
 		TableView<Transaction> table = new TableView<Transaction>();
-		table.setPrefWidth(vb.getWidth());
 
 		table.setPrefHeight(1900);
 		table.setPrefWidth(1800);
@@ -266,8 +346,6 @@ public class Main extends Application {
 		TableColumn<Transaction, String> fifthColumn = new TableColumn<>("category");
 		fifthColumn.setCellValueFactory(n -> n.getValue().generateTransactionVisual().getCategory());
 
-		vb.getChildren().addAll(table);
-
 		table.setEditable(true);
 
 		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -277,7 +355,7 @@ public class Main extends Application {
 		ObservableList<Transaction> items1 = FXCollections.observableArrayList();
 
 		try {
-			TransactionImporter importer = new TransactionImporter(new File("transactions"));
+			TransactionImporter importer = new TransactionImporter(new File(transactionFileName));
 			ArrayList<Transaction> transactions = importer.getTransactions();
 			items1.addAll(transactions);
 		} catch (FileNotFoundException error) {
@@ -286,7 +364,7 @@ public class Main extends Application {
 		}
 
 		table.getItems().addAll(items1);
-		return vb;
+		return table;
 
 	}
 

@@ -45,4 +45,8 @@ public class TransactionVisual {
 		return category;
 	}
 
+	public void setCategory(String newCategory) {
+		this.category.setValue(newCategory);
+	}
+	
 }
