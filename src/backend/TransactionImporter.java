@@ -93,7 +93,7 @@ public class TransactionImporter {
 	 * @param transactions The ArrayList of Transaction objects to be saved.
 	 * @throws FileNotFoundException If the specified file is not found.
 	 */
-	public void saveToFile(ArrayList<Transaction> transactions) throws FileNotFoundException {
+	public static boolean saveToFile(ArrayList<Transaction> transactions) throws FileNotFoundException {
 	    // Create a TextInputDialog to prompt the user for a file name
 	    TextInputDialog dialog = new TextInputDialog();
 	    dialog.setTitle("Save File");
@@ -122,11 +122,13 @@ public class TransactionImporter {
 	            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
 	                oos.writeObject(transactions);
 	                System.out.println("ArrayList transactions serialized and saved to file.");
+	                return true;
 	            } catch (IOException e) {
 	                e.printStackTrace();
 	            }
 	        }
 	    }
+	    return false;
 	}
 	
 	/**
@@ -134,7 +136,7 @@ public class TransactionImporter {
 	 *
 	 * @return An ArrayList of Transaction objects if successful, or null if an error occurs during loading.
 	 */
-	public ArrayList<Transaction>  loadFromFile() throws FileNotFoundException {//filename.ser
+	public static ArrayList<Transaction>  loadFromFile() throws FileNotFoundException {//filename.ser
 		ArrayList<Transaction> list = null;
 		
 		// Create a FileChooser to allow the user to select a file

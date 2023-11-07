@@ -1,1 +1,3 @@
 true 399.99 01 11 2023 NONE Food
+true 139 15 7 2020 NEED test1_right
+false 200 35 15 -1980 LUXURY test2_wrongDate
